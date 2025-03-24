@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/suhassalian27/E-Commerce-Website-using-ReactJS-NodeJS.git"
+    "url": "git+https://github.com/HieeusNguyen/E-Commerce-Website.git"
   },
   "author": "Suhas Salian",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/suhassalian27/E-Commerce-Website-using-ReactJS-NodeJS/issues"
+    "url": "https://github.com/HieeusNguyen/E-Commerce-Website.git/issues"
   },
-  "homepage": "https://github.com/suhassalian27/E-Commerce-Website-using-ReactJS-NodeJS#readme",
+  "homepage": "https://github.com/HieeusNguyen/E-Commerce-Website.git#readme",
   "dependencies": {
     "@babel/cli": "^7.10.4",
     "@babel/core": "^7.10.4",
