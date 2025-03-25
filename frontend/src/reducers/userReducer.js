@@ -4,7 +4,10 @@ import {
     USER_SIGNIN_FAIL,
     USER_REGISTER_REQUEST,
     USER_REGISTER_SUCCESS,
-    USER_REGISTER_FAIL
+    USER_REGISTER_FAIL,
+    USER_LOGOUT_REQUEST,
+    USER_LOGOUT_SUCCESS,
+    USER_LOGOUT_FAIL
 } from "../constants/userConstants";
 
 function userSigninReducer(state = {}, action) {
@@ -31,4 +34,16 @@ function userRegisterReducer(state = {}, action) {
             return state;
     }
 }
-export { userSigninReducer, userRegisterReducer };
+function userLogoutReducer(state = {}, action){
+    switch (action.type){
+        case USER_LOGOUT_REQUEST:
+            return { loading: true};
+        case USER_LOGOUT_SUCCESS:
+            return { loading: false};
+        case USER_LOGOUT_FAIL:
+            return { loading: false, error: action.payload};
+        default:
+            return state;
+    }
+}
+export { userSigninReducer, userRegisterReducer, userLogoutReducer };

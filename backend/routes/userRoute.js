@@ -56,4 +56,13 @@ router.get("/createadmin", async (req, res) => {
     }
 });
 
+router.get("/logout", async (req,res) => {
+    try{
+        res.cookie("userInfo", "", {maxAge: 1});
+        res.redirect("/");
+    }catch (error){
+
+    }
+})
+
 export default router;

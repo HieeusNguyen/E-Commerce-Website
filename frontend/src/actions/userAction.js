@@ -6,7 +6,10 @@ import {
     USER_SIGNIN_FAIL,
     USER_REGISTER_FAIL,
     USER_REGISTER_SUCCESS,
-    USER_REGISTER_REQUEST
+    USER_REGISTER_REQUEST,
+    USER_LOGOUT_REQUEST,
+    USER_LOGOUT_FAIL,
+    USER_LOGOUT_SUCCESS
 } from "../constants/userConstants";
 
 const signin = (email, password) => async dispatch => {
@@ -40,4 +43,16 @@ const register = (name, email, password) => async dispatch => {
     }
 };
 
-export { signin, register };
+const logout = () => async dispatch => {
+    dispatch({type: USER_LOGOUT_REQUEST})
+    try{
+        await Axios.get("/api/users/logout",{});
+        Cookie.remove("userInfo"); 
+        window.location.href = "/"; 
+        dispatch({type: USER_LOGOUT_SUCCESS})
+    }catch (error) {
+        dispatch({type: USER_LOGOUT_FAIL, payload: error.message});
+    }
+};
+
+export { signin, register, logout };

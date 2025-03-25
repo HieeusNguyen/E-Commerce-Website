@@ -15,7 +15,6 @@ router.get("/:id", async (req, res) => {
     } else {
         res.status(404).send({ message: "404 product not found" });
     }
-    res.send(product);
 });
 
 router.post("/", async (req, res) => {
