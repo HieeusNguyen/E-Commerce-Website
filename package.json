@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": "12.x",
-    "npm": "6.x"
+    "node": "18.x",
+    "npm": "9.x"
   },
   "scripts": {
     "start": "nodemon --watch backend --exec npx @babel/node backend/server.js",
@@ -15,25 +15,23 @@
     "type": "git",
     "url": "git+https://github.com/HieeusNguyen/E-Commerce-Website.git"
   },
-  "author": "Suhas Salian",
-  "license": "ISC",
+  "author": "Hieu",
+  "license": "",
   "bugs": {
     "url": "https://github.com/HieeusNguyen/E-Commerce-Website.git/issues"
   },
   "homepage": "https://github.com/HieeusNguyen/E-Commerce-Website.git#readme",
   "dependencies": {
-    "@babel/cli": "^7.10.4",
-    "@babel/core": "^7.10.4",
-    "@babel/node": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
-    "body-parser": "^1.19.0",
-    "bootstrap": "^4.5.0",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.5.9",
-    "mongoose": "^5.9.22",
-    "nodemon": "^2.0.4",
-    "react-bootstrap": "^1.2.2"
+    "@babel/cli": "^7.23.9",
+    "@babel/core": "^7.24.0",
+    "@babel/node": "^7.23.9",
+    "@babel/preset-env": "^7.24.0",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.2.1",
+    "nodemon": "^3.1.0"
   }
 }

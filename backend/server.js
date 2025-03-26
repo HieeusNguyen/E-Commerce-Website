@@ -17,9 +17,9 @@ mongoose
     .connect(mongodbUrl, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useCreateIndex: true
     })
-    .catch(error => console.log(error.reason));
+    .then(() => console.log("MongoDB connected successfully"))
+    .catch((error) => console.error("MongoDB connection error:", error));
 
 const app = express();
 

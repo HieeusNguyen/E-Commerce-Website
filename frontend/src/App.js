@@ -12,7 +12,7 @@ import CartScreen from "./Screens/CartScreen";
 import SigninScreen from "./Screens/SigninScreen";
 import RegisterScreen from "./Screens/RegisterScreen";
 import ProductsScreen from "./Screens/ProductsScreen";
-import ShipppingScreen from "./Screens/ShippingScreen";
+import ShippingScreen from "./Screens/ShippingScreen";
 import PaymentScreen from "./Screens/PaymentScreen";
 import PlaceOrderScreen from "./Screens/PlaceOrderScreen";
 
@@ -96,7 +96,7 @@ function App() {
                 <main className="main">
                     <div className="content">
                         <Route path="/products" component={ProductsScreen} />
-                        <Route path="/shipping" component={ShipppingScreen} />
+                        <Route path="/shipping" component={ShippingScreen} />
                         <Route path="/payment" component={PaymentScreen} />
                         <Route
                             path="/placeorder"
