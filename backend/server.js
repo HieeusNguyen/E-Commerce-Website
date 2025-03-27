@@ -10,14 +10,11 @@ const path = require("path");
 
 dotenv.config();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 6000;
 const mongodbUrl = config.MONGODB_URL;
 
 mongoose
-    .connect(mongodbUrl, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
+    .connect(mongodbUrl)
     .then(() => console.log("MongoDB connected successfully"))
     .catch((error) => console.error("MongoDB connection error:", error));
 
@@ -39,6 +36,6 @@ if (process.env.NODE_ENV === "production") {
 
 app.listen(PORT, () =>
     console.log(
-        "************************************************** \n The Server has started at : http://localhost:5000"
+        "************************************************** \n The Server has started at : http://localhost:6000"
     )
 );

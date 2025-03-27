@@ -1,7 +1,5 @@
 import React from "react";
 import "./App.css";
-import axios from "axios";
-
 import { BrowserRouter, Route, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"; 
 import { logout } from "./actions/userAction";
@@ -41,7 +39,7 @@ function App() {
                         <button onClick={openmenu}>&#9776;</button>
                         <Link to="/">
                             Origami
-                            <img src={logo} className="logo" />
+                            <img src={logo} className="logo" alt="logo" />
                         </Link>
                     </div>
                     <div className="header-links">
