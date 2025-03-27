@@ -5,37 +5,35 @@ import { detailsProduct } from "../actions/productActions";
 
 function ProductScreen(props) {
     const [qty, setQty] = useState(1);
-    const productDetails = useSelector(state => state.productDetails);
+    const productDetails = useSelector((state) => state.productDetails);
     const { product, loading, error } = productDetails;
     const dispatch = useDispatch();
 
     useEffect(() => {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
         dispatch(detailsProduct(props.match.params.id));
-        return () => {
-            //
-        };
+        return () => {};
     }, [dispatch, props.match.params.id]);
 
     const handleAddToCart = () => {
-        props.history.push("/cart/" + props.match.params.id + "?qty=" + qty);
+        props.history.push(`/cart/${props.match.params.id}?qty=${qty}`);
     };
 
     return (
         <div>
             <div className="back-to-result">
                 <Link to="/">
-                    <span class="material-icons">arrow_back</span>
+                    <span className="material-icons">arrow_back</span>
                 </Link>
             </div>
             {loading ? (
                 <div>Loading...</div>
             ) : error ? (
                 <div>{error}</div>
-            ) : (
+            ) : product ? (
                 <div className="details">
                     <div className="details-image">
-                        <img src={product.image} alt="product" />
+                        <img src={product.image} alt={product.name} />
                     </div>
                     <div className="details-info">
                         <ul>
@@ -56,27 +54,24 @@ function ProductScreen(props) {
                                 <div>{product.description}</div>
                             </li>
                             <li>
-                                Net Qty :
+                                Net Qty:
                                 <select
                                     value={qty}
-                                    onChange={e => {
-                                        setQty(e.target.value);
-                                    }}
+                                    onChange={(e) => setQty(e.target.value)}
                                 >
-                                    {[
-                                        ...Array(product.countInStock).keys()
-                                    ].map(x => (
-                                        <option key={product._id} value={x + 1}>
-                                            {x + 1}
-                                        </option>
-                                    ))}
-                                    }
+                                    {[...Array(product.countInStock).keys()].map(
+                                        (x) => (
+                                            <option key={x} value={x + 1}>
+                                                {x + 1}
+                                            </option>
+                                        )
+                                    )}
                                 </select>
                             </li>
                             <li>
                                 {product.countInStock > 0
                                     ? "In Stock"
-                                    : "Unavailble"}
+                                    : "Unavailable"}
                             </li>
                             <li>
                                 {product.countInStock > 0 && (
@@ -87,13 +82,15 @@ function ProductScreen(props) {
                                         Add to Cart
                                     </button>
                                 )}
-                                {console.log(product.category)}
                             </li>
                         </ul>
                     </div>
                 </div>
+            ) : (
+                <div>Product not found</div>
             )}
         </div>
     );
 }
+
 export default ProductScreen;

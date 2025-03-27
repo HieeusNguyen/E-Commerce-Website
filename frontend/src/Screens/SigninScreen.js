@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signin } from "../actions/userAction";
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
+import { loginWithGoogle } from "../actions/userAction";
 
 function SigninScreen(props) {
     const [email, setEmail] = useState("");
@@ -61,6 +64,16 @@ function SigninScreen(props) {
                         </button>
                     </li>
                     <li>New to Origami?</li>
+                    <GoogleLogin
+                    onSuccess={credentialResponse => {
+                        console.log(credentialResponse);
+                        console.log(jwtDecode(credentialResponse.credential))
+                        dispatch(loginWithGoogle(credentialResponse.credential))
+                    }}
+                    onError={() => {
+                        console.log('Login Failed');
+                    }}
+                    />
                     <li>
                         <Link
                             to={
