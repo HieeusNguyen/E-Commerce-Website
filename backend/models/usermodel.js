@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
         index: true,
         dropDups: true
     },
-    password: { type: String, required: true },
+    password: { type: String, required: false },
     isAdmin: { type: Boolean, required: true, default: false }
 });
 

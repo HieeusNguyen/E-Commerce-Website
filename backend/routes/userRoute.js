@@ -44,21 +44,6 @@ router.post("/register", async (req, res) => {
     }
 });
 
-router.get("/createadmin", async (req, res) => {
-    try {
-        const user = new User({
-            name: "suhas",
-            email: "suhas@gmail.com",
-            password: "1234",
-            isAdmin: true
-        });
-        const newUser = await user.save();
-        res.send(newUser);
-    } catch (error) {
-        res.send({ message: error.message });
-    }
-});
-
 router.get("/logout", async (req,res) => {
     try{
         res.cookie("userInfo", "", {maxAge: 1});
@@ -79,10 +64,8 @@ router.post("/google-login", async (req, res) => {
 
         const { email, name } = ticket.getPayload();
         const user = await User.findOne({ email });
-        console.log("user is ", user);
 
         if (user === null) {
-            console.log("hieu", name,email)
             const newUser = new User({
                 name,
                 email,
@@ -91,7 +74,6 @@ router.post("/google-login", async (req, res) => {
             });
 
             await newUser.save();
-            console.log("save user email successfully");
         }
 
         const authToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
@@ -107,6 +89,6 @@ router.post("/google-login", async (req, res) => {
     }catch (error){
         res.send({message: error.message})
     }
-})
+});
 
 export default router;
