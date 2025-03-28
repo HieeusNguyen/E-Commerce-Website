@@ -1,16 +1,20 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { checkout } from "../actions/CheckoutAction"; 
 import CheckoutSteps from "../components/CheckoutSteps";
 
 function PlaceOrderScreen(props) {
-    const cart = useSelector(state => state.cart);
+    const cart = useSelector((state) => state.cart);
+    const checkoutState = useSelector((state) => state.checkout); 
     const { cartItems, shipping, payment } = cart;
+
     if (!shipping.address) {
         props.history.push("/shipping");
     } else if (!payment) {
         props.history.push("/payment");
     }
+
     const itemsPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0);
     const shippingPrice = itemsPrice > 100 ? 0 : 10;
     const taxPrice = 0.15 * itemsPrice;
@@ -21,9 +25,20 @@ function PlaceOrderScreen(props) {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
     const placeOrderHandler = () => {
-        props.history.push("/");
-        alert("Order placed successfully.");
+        const orderData = {
+            amount: totalPrice, 
+            orderDescription: `Order from user - Total: ${totalPrice}`, 
+            orderType: "250000", 
+            bankCode: "", 
+            language: "vn", 
+            cartItems: cartItems, 
+            shippingAddress: shipping, 
+            paymentMethod: payment.paymentMethod, 
+        };
+
+        dispatch(checkout(orderData));
     };
 
     return (
@@ -35,13 +50,13 @@ function PlaceOrderScreen(props) {
                     <div>
                         <h3>Shipping</h3>
                         <div>
-                            {cart.shipping.address},{cart.shipping.city},
-                            {cart.shipping.postalCode},{cart.shipping.country},
+                            {cart.shipping.address}, {cart.shipping.city},{" "}
+                            {cart.shipping.postalCode}, {cart.shipping.country}
                         </div>
                     </div>
                     <div>
                         <h3>Payment</h3>
-                        <div>Payment Method : {cart.payment.paymentMethod}</div>
+                        <div>Payment Method: {cart.payment.paymentMethod}</div>
                     </div>
                     <div>
                         <ul className="cart-list-container">
@@ -52,30 +67,20 @@ function PlaceOrderScreen(props) {
                             {cartItems.length === 0 ? (
                                 <div>Cart is Empty.</div>
                             ) : (
-                                cartItems.map(item => (
-                                    <li>
+                                cartItems.map((item) => (
+                                    <li key={item.product}>
                                         <div className="cart-image">
-                                            <img
-                                                src={item.image}
-                                                alt="product"
-                                            />
+                                            <img src={item.image} alt="product" />
                                         </div>
                                         <div className="cart-name">
                                             <div>
-                                                <Link
-                                                    to={
-                                                        "/product/" +
-                                                        item.product
-                                                    }
-                                                >
+                                                <Link to={"/product/" + item.product}>
                                                     {item.name}
                                                 </Link>
                                             </div>
-                                            <div>Quantity : {item.qty}</div>
+                                            <div>Quantity: {item.qty}</div>
                                         </div>
-                                        <div className="cart-price">
-                                            ${item.price}
-                                        </div>
+                                        <div className="cart-price">${item.price}</div>
                                     </li>
                                 ))
                             )}
@@ -88,8 +93,9 @@ function PlaceOrderScreen(props) {
                             <button
                                 className="button primary full-width"
                                 onClick={placeOrderHandler}
+                                disabled={checkoutState.loading} 
                             >
-                                Place Order
+                                {checkoutState.loading ? "Processing..." : "Place Order"}
                             </button>
                         </li>
                         <li>
@@ -112,6 +118,9 @@ function PlaceOrderScreen(props) {
                             <div>${totalPrice}</div>
                         </li>
                     </ul>
+                    {checkoutState.error && (
+                        <div className="error-message">{checkoutState.error}</div>
+                    )}
                 </div>
             </div>
         </div>

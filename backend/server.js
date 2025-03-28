@@ -5,6 +5,8 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import userRoute from "./routes/userRoute";
 import productRoute from "./routes/productRoute";
+import checkoutRoute from "./routes/checkoutRouter";
+import cors from "cors";
 
 const path = require("path");
 
@@ -20,9 +22,16 @@ mongoose
 
 const app = express();
 
+app.use(cors({
+    origin: "http://localhost:3000", // Cho phép frontend từ localhost:3000
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
 app.use(bodyParser.json());
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
+app.use("/api/checkout", checkoutRoute);
 
 // Serve static assests if in production
 
