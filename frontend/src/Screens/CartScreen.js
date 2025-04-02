@@ -1,27 +1,32 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../actions/CartAction";
-import { Link } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 
-function CartScreen(props) {
+function CartScreen() {
     const cart = useSelector(state => state.cart);
     const { cartItems } = cart;
-    const productId = props.match.params.id;
-    const qty = props.location.search
-        ? Number(props.location.search.split("=")[1])
+    const { id } = useParams(); 
+    const location = useLocation(); 
+    const qty = location.search
+        ? Number(location.search.split("=")[1])
         : 1;
     const dispatch = useDispatch();
+    const navigate = useNavigate(); 
+
     const removeFromCartHandler = productId => {
         dispatch(removeFromCart(productId));
     };
+
     useEffect(() => {
         window.scrollTo(0, 0);
-        if (productId) {
-            dispatch(addToCart(productId, qty));
+        if (id) {
+            dispatch(addToCart(id, qty));
         }
-    }, []);
+    }, [dispatch, id, qty]); 
+
     const checkoutHandler = () => {
-        props.history.push("/signin?redirect=shipping");
+        navigate("/shipping");
     };
 
     return (
@@ -38,13 +43,13 @@ function CartScreen(props) {
                         </div>
                     ) : (
                         cartItems.map(item => (
-                            <li>
+                            <li key={item.product}>
                                 <div className="cart-image">
                                     <img src={item.image} alt="product" />
                                 </div>
                                 <div className="cart-name">
                                     <div>
-                                        <Link to={"/product/" + item.product}>
+                                        <Link to={`/product/${item.product}`}>
                                             {item.name}
                                         </Link>
                                     </div>
@@ -56,7 +61,7 @@ function CartScreen(props) {
                                                 dispatch(
                                                     addToCart(
                                                         item.product,
-                                                        e.target.value
+                                                        Number(e.target.value)
                                                     )
                                                 )
                                             }

@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { savePayment } from "../actions/CartAction";
+import { useNavigate } from "react-router-dom"; 
 import CheckoutSteps from "../components/CheckoutSteps";
 
-function PaymentScreen(props) {
+function PaymentScreen() {
     const [paymentMethod, setPaymentMethod] = useState("");
-
     const dispatch = useDispatch();
+    const navigate = useNavigate(); 
 
     const submitHandler = e => {
         e.preventDefault();
         dispatch(savePayment(paymentMethod));
-        props.history.push("placeorder");
+        navigate("/placeorder"); 
     };
+
     return (
         <div>
             <CheckoutSteps step1 step2 step3></CheckoutSteps>
@@ -29,7 +31,7 @@ function PaymentScreen(props) {
                                 id="paymentMethod"
                                 onChange={e => setPaymentMethod(e.target.value)}
                                 value="paypal"
-                            ></input>
+                            />
                             <label htmlFor="paymentMethod">Paypal</label>
                         </li>
                         <li>
@@ -43,4 +45,5 @@ function PaymentScreen(props) {
         </div>
     );
 }
+
 export default PaymentScreen;

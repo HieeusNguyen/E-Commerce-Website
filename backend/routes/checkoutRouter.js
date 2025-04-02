@@ -13,7 +13,7 @@ router.post('/create_payment_url', function (req, res, next) {
     var tmnCode = config.VNP_TMNCODE;
     var secretKey = config.VNP_HASHSECRET;
     var vnpUrl = config.VNP_URL;
-    var returnUrl = "http://localhost:3000/";
+    var returnUrl = "http://localhost:3000/payment/status";
 
     var date = new Date();
 

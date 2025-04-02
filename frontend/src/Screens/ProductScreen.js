@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { detailsProduct } from "../actions/productActions";
 
-function ProductScreen(props) {
+function ProductScreen() {
     const [qty, setQty] = useState(1);
     const productDetails = useSelector((state) => state.productDetails);
     const { product, loading, error } = productDetails;
     const dispatch = useDispatch();
+    const { id } = useParams(); 
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        dispatch(detailsProduct(props.match.params.id));
+        dispatch(detailsProduct(id));
         return () => {};
-    }, [dispatch, props.match.params.id]);
+    }, [dispatch, id]);
 
     const handleAddToCart = () => {
-        props.history.push(`/cart/${props.match.params.id}?qty=${qty}`);
+        navigate(`/cart/${id}?qty=${qty}`); 
     };
 
     return (

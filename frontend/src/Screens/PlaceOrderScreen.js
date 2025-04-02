@@ -1,19 +1,23 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { checkout } from "../actions/CheckoutAction"; 
 import CheckoutSteps from "../components/CheckoutSteps";
 
-function PlaceOrderScreen(props) {
+function PlaceOrderScreen() {
     const cart = useSelector((state) => state.cart);
     const checkoutState = useSelector((state) => state.checkout); 
     const { cartItems, shipping, payment } = cart;
+    
+    const navigate = useNavigate();
 
-    if (!shipping.address) {
-        props.history.push("/shipping");
-    } else if (!payment) {
-        props.history.push("/payment");
-    }
+    useEffect(() => {
+        if (!shipping.address) {
+            navigate("/shipping");
+        } else if (!payment) {
+            navigate("/payment");
+        }
+    }, [shipping, payment, navigate]);
 
     const itemsPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0);
     const shippingPrice = itemsPrice > 100 ? 0 : 10;
@@ -43,20 +47,19 @@ function PlaceOrderScreen(props) {
 
     return (
         <div>
-            <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
+            <CheckoutSteps step1 step2 step3 step4 />
 
             <div className="placeorder">
                 <div className="placeorder-info">
                     <div>
                         <h3>Shipping</h3>
                         <div>
-                            {cart.shipping.address}, {cart.shipping.city},{" "}
-                            {cart.shipping.postalCode}, {cart.shipping.country}
+                            {shipping.address}, {shipping.city}, {shipping.postalCode}, {shipping.country}
                         </div>
                     </div>
                     <div>
                         <h3>Payment</h3>
-                        <div>Payment Method: {cart.payment.paymentMethod}</div>
+                        <div>Payment Method: {payment ? payment.paymentMethod : 'Not selected'}</div>
                     </div>
                     <div>
                         <ul className="cart-list-container">

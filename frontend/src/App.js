@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"; 
 import { logout } from "./actions/userAction";
 
@@ -13,6 +13,7 @@ import ProductsScreen from "./Screens/ProductsScreen";
 import ShippingScreen from "./Screens/ShippingScreen";
 import PaymentScreen from "./Screens/PaymentScreen";
 import PlaceOrderScreen from "./Screens/PlaceOrderScreen";
+import PaymentStatus from "./Screens/PaymentStatus";
 
 import logo from "./Images/logo.png";
 
@@ -20,9 +21,11 @@ function App() {
     const userSignin = useSelector(state => state.userSignin);
     const { userInfo } = userSignin;
     const dispatch = useDispatch();
+    
     const openmenu = () => {
         document.querySelector(".sidebar").classList.add("open");
     };
+    
     const closemenu = () => {
         document.querySelector(".sidebar").classList.remove("open");
     };
@@ -36,7 +39,7 @@ function App() {
             <div className="grid-container">
                 <header className="header">
                     <div className="brand">
-                        <button onClick={openmenu}>&#9776;</button>
+                        <button onClick={openmenu}>☰</button>
                         <Link to="/">
                             Origami
                             <img src={logo} className="logo" alt="logo" />
@@ -45,7 +48,7 @@ function App() {
                     <div className="header-links">
                         <span>
                             <Link to="/cart">
-                                <span class="material-icons">
+                                <span className="material-icons">
                                     shopping_cart
                                 </span>
                             </Link>
@@ -74,37 +77,29 @@ function App() {
                         className="sidebar-close-button"
                         onClick={closemenu}
                     >
-                        <span class="material-icons">arrow_back_ios</span>
+                        <span className="material-icons">arrow_back_ios</span>
                     </button>
                     <ul>
-                        <li>
-                            <a href="index.html">Mens</a>
-                        </li>
-                        <li>
-                            <a href="index.html">Women</a>
-                        </li>
-                        <li>
-                            <a href="index.html">Unisex</a>
-                        </li>
-                        <li>
-                            <a href="index.html">Children</a>
-                        </li>
+                        <li><a href="index.html">Mens</a></li>
+                        <li><a href="index.html">Women</a></li>
+                        <li><a href="index.html">Unisex</a></li>
+                        <li><a href="index.html">Children</a></li>
                     </ul>
                 </aside>
                 <main className="main">
                     <div className="content">
-                        <Route path="/products" component={ProductsScreen} />
-                        <Route path="/shipping" component={ShippingScreen} />
-                        <Route path="/payment" component={PaymentScreen} />
-                        <Route
-                            path="/placeorder"
-                            component={PlaceOrderScreen}
-                        />
-                        <Route path="/signin" component={SigninScreen} />
-                        <Route path="/register" component={RegisterScreen} />
-                        <Route path="/product/:id" component={ProductScreen} />
-                        <Route path="/" exact={true} component={HomeScreen} />
-                        <Route path="/cart/:id?" component={CartScreen} />
+                        <Routes>
+                            <Route path="/products" element={<ProductsScreen />} />
+                            <Route path="/shipping" element={<ShippingScreen />} />
+                            <Route path="/payment" element={<PaymentScreen />} />
+                            <Route path="/payment/status" element={<PaymentStatus />} />
+                            <Route path="/placeorder" element={<PlaceOrderScreen />} />
+                            <Route path="/signin" element={<SigninScreen />} />
+                            <Route path="/register" element={<RegisterScreen />} />
+                            <Route path="/product/:id" element={<ProductScreen />} />
+                            <Route path="/" element={<HomeScreen />} exact />
+                            <Route path="/cart/:id?" element={<CartScreen />} />
+                        </Routes>
                     </div>
                 </main>
                 <footer className="footer">All right reserved</footer>

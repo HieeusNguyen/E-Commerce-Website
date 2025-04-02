@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { saveShipping } from "../actions/CartAction";
 import CheckoutSteps from "../components/CheckoutSteps";
 
-function ShippingScreen(props) {
+function ShippingScreen() {
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [postalCode, setPostalCode] = useState("");
     const [country, setCountry] = useState("");
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const submitHandler = e => {
         e.preventDefault();
         dispatch(saveShipping({ address, city, postalCode, country }));
-        props.history.push("payment");
+        navigate("/payment");
     };
+    
     return (
         <div>
             <CheckoutSteps step1 step2></CheckoutSteps>
@@ -32,8 +34,10 @@ function ShippingScreen(props) {
                                 type="text"
                                 name="address"
                                 id="address"
+                                value={address}
                                 onChange={e => setAddress(e.target.value)}
-                            ></input>
+                                required
+                            />
                         </li>
                         <li>
                             <label htmlFor="city">City</label>
@@ -41,8 +45,10 @@ function ShippingScreen(props) {
                                 type="text"
                                 name="city"
                                 id="city"
+                                value={city}
                                 onChange={e => setCity(e.target.value)}
-                            ></input>
+                                required
+                            />
                         </li>
                         <li>
                             <label htmlFor="postalCode">Postal Code</label>
@@ -50,8 +56,10 @@ function ShippingScreen(props) {
                                 type="text"
                                 name="postalCode"
                                 id="postalCode"
+                                value={postalCode}
                                 onChange={e => setPostalCode(e.target.value)}
-                            ></input>
+                                required
+                            />
                         </li>
                         <li>
                             <label htmlFor="country">Country</label>
@@ -59,10 +67,11 @@ function ShippingScreen(props) {
                                 type="text"
                                 name="country"
                                 id="country"
+                                value={country}
                                 onChange={e => setCountry(e.target.value)}
-                            ></input>
+                                required
+                            />
                         </li>
-
                         <li>
                             <button type="submit" className="button primary">
                                 Continue
@@ -74,4 +83,5 @@ function ShippingScreen(props) {
         </div>
     );
 }
+
 export default ShippingScreen;
