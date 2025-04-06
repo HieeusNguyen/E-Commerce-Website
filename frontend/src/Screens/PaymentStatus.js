@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 
 const PaymentStatus = () => {
   const [searchParams] = useSearchParams();
-  const status = searchParams.get('status'); 
+  const status = "success"; 
   const isSuccess = status === 'success';
 
   return (
@@ -28,10 +28,10 @@ const PaymentStatus = () => {
         <div className="status-details">
           <p>
             {isSuccess 
-              ? 'Chúng tôi đã gửi xác nhận đến email của bạn.' 
+              ? '' 
               : 'Vui lòng thử lại hoặc liên hệ hỗ trợ nếu vấn đề vẫn tiếp diễn.'}
           </p>
-          {isSuccess && <p>Vui lòng kiểm tra hộp thư đến hoặc thư rác.</p>}
+          {isSuccess}
         </div>
         <div className="button-group">
           {!isSuccess && (

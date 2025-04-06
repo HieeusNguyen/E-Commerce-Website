@@ -9,7 +9,16 @@ import {
     USER_REGISTER_REQUEST,
     USER_LOGOUT_REQUEST,
     USER_LOGOUT_FAIL,
-    USER_LOGOUT_SUCCESS
+    USER_LOGOUT_SUCCESS,
+    USER_LIST_REQUEST,
+    USER_LIST_SUCCESS,
+    USER_LIST_FAIL,
+    USER_SAVE_REQUEST,
+    USER_SAVE_SUCCESS,
+    USER_SAVE_FAIL,
+    USER_DELETE_REQUEST,
+    USER_DELETE_SUCCESS,
+    USER_DELETE_FAIL
 } from "../constants/userConstants";
 
 const signin = (email, password) => async dispatch => {
@@ -66,4 +75,36 @@ const loginWithGoogle = (googleToken) => async dispatch => {
     }
 };
 
-export { signin, register, logout, loginWithGoogle };
+const listUsers = () => async dispatch => {
+    try {
+        dispatch({ type: USER_LIST_REQUEST });
+        const { data } = await Axios.get("/api/users/list-user");
+        dispatch({ type: USER_LIST_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: USER_LIST_FAIL, payload: error.message });
+    }
+};
+
+const saveUser = (user) => async (dispatch) => {
+    try {
+        dispatch({ type: USER_SAVE_REQUEST });
+        const { data } = user._id
+            ? await Axios.put(`/api/users/${user._id}`, user)
+            : await Axios.post('/api/users', user);
+        dispatch({ type: USER_SAVE_SUCCESS, payload: data });
+    } catch (error) {
+        dispatch({ type: USER_SAVE_FAIL, payload: error.message });
+    }
+};
+
+const deleteUser = (userId) => async (dispatch) => {
+    try {
+        dispatch({ type: USER_DELETE_REQUEST });
+        await Axios.delete(`/api/users/${userId}`);
+        dispatch({ type: USER_DELETE_SUCCESS });
+    } catch (error) {
+        dispatch({ type: USER_DELETE_FAIL, payload: error.message });
+    }
+};
+
+export { signin, register, logout, loginWithGoogle, listUsers, saveUser, deleteUser };

@@ -5,7 +5,13 @@ import {
     productSaveReducer,
     productDeleteReducer,
 } from "./reducers/productReducers";
-import { userSigninReducer, userRegisterReducer } from "./reducers/userReducer";
+import { userSigninReducer, 
+    userRegisterReducer, 
+    userLogoutReducer, 
+    userSaveReducer, 
+    userListReducer, 
+    userDeleteReducer 
+} from "./reducers/userReducer";
 import { cartReducer } from "./reducers/cartReducers";
 import { checkoutReducer } from "./reducers/checkoutReducers"; 
 import thunk from "redux-thunk";
@@ -23,6 +29,10 @@ const reducer = combineReducers({
     cart: cartReducer,
     userSignin: userSigninReducer,
     userRegister: userRegisterReducer,
+    userLogout: userLogoutReducer,
+    userList: userListReducer,      
+    userSave: userSaveReducer,      
+    userDelete: userDeleteReducer,
     productList: productListReducer,
     productDetails: productDetailsReducer,
     productSave: productSaveReducer,

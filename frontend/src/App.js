@@ -16,10 +16,12 @@ import PlaceOrderScreen from "./Screens/PlaceOrderScreen";
 import PaymentStatus from "./Screens/PaymentStatus";
 
 import logo from "./Images/logo.png";
+import UserManagementScreen from "./Screens/UsersManagementScreen";
 
 function App() {
     const userSignin = useSelector(state => state.userSignin);
     const { userInfo } = userSignin;
+    console.log("userInfo = ", userInfo ?? "")
     const dispatch = useDispatch();
     
     const openmenu = () => {
@@ -55,14 +57,21 @@ function App() {
                         </span>
                         <span className="user-menu">
                             {userInfo ? (
-                                <>
-                                    <Link to="/profile">{userInfo.name}</Link>
-                                    <div className="logout-dropdown">
-                                        <button onClick={handleLogout}>
-                                            Logout
-                                        </button>
+                                <div className="user-menu-wrapper">
+                                    <Link to="/profile" className="user-name">
+                                        {userInfo.name}
+                                    </Link>
+                                    <div className="dropdown-menu">
+                                        {userInfo.isAdmin === true && (
+                                            <>
+                                                <Link to="/admin/users">Quản lý người dùng</Link>
+                                                <Link to="/products">Quản lý sản phẩm</Link>
+                                                <Link to="/admin/orders">Quản lý đơn hàng</Link>
+                                            </>
+                                        )}
+                                        <button onClick={handleLogout}>Logout</button>
                                     </div>
-                                </>
+                                </div>
                             ) : (
                                 <Link to="/signin">
                                     <span className="material-icons">login</span>
@@ -99,6 +108,7 @@ function App() {
                             <Route path="/product/:id" element={<ProductScreen />} />
                             <Route path="/" element={<HomeScreen />} exact />
                             <Route path="/cart/:id?" element={<CartScreen />} />
+                            <Route path="/admin/users" element={<UserManagementScreen />} />
                         </Routes>
                     </div>
                 </main>
