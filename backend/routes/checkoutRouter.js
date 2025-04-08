@@ -1,6 +1,7 @@
-import express from "express"
-import config  from "../config";
+import express from "express";
+import config from "../config";
 import OrderController from "../controller/OrderController";
+import Invoice from "../models/invoiceModel"; 
 const moment = require('moment');
 
 const router = express.Router();
@@ -34,7 +35,6 @@ router.post('/create_payment_url', async function (req, res, next) {
     vnp_Params['vnp_Version'] = '2.1.0';
     vnp_Params['vnp_Command'] = 'pay';
     vnp_Params['vnp_TmnCode'] = tmnCode;
-    // vnp_Params['vnp_Merchant'] = ''
     vnp_Params['vnp_Locale'] = locale;
     vnp_Params['vnp_CurrCode'] = currCode;
     vnp_Params['vnp_TxnRef'] = orderId;
@@ -73,36 +73,6 @@ router.post('/create_payment_url', async function (req, res, next) {
     var signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
     vnp_Params['vnp_SecureHash'] = signed;
     vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
-    
-    // const orderData = {
-    //     to_name: req.body.name || "Người nhận",
-    //     to_phone: req.body.phone || "0987654321",
-    //     to_address: req.body.address || "72 Thành Thái, Phường 14, Quận 10, Hồ Chí Minh, Vietnam",
-    //     to_ward_code: "20308",
-    //     to_district_id: 1444,
-    //     service_type_id: 2,
-    //     payment_type_id: 2,
-    //     required_note: "KHONGCHOXEMHANG",
-    //     weight: req.body.weight || 1000,
-    //     length: 20,
-    //     width: 20,
-    //     height: 20,
-    //     items: req.body.items || [
-    //         {
-    //             name: "Áo Polo",
-    //             code: "Polo123",
-    //             quantity: 1,
-    //             price: 200000,
-    //             length: 12,
-    //             width: 12,
-    //             height: 12,
-    //             weight: 1200,
-    //             category: {
-    //                 level1: "Áo"
-    //             }
-    //         }
-    //     ]
-    // };
 
     const orderData = {
         payment_type_id: 2,
@@ -119,12 +89,12 @@ router.post('/create_payment_url', async function (req, res, next) {
         return_district_id: null,
         return_ward_code: "",
         client_order_code: "",
-        to_name: "TinTest124",
-        to_phone: "0987654321",
+        to_name: "Hieeus",
+        to_phone: "0961633226",
         to_address: "72 Thành Thái, Phường 14, Quận 10, Hồ Chí Minh, Vietnam",
         to_ward_code: "20308",
         to_district_id: 1444,
-        cod_amount: 200000,
+        cod_amount: req.body.amount,
         content: "Theo New York Times",
         weight: 200,
         length: 1,
@@ -137,29 +107,59 @@ router.post('/create_payment_url', async function (req, res, next) {
         service_type_id: 2,
         coupon: null,
         pick_shift: [2],
-        items: [
-            {
-                name: "Áo Polo",
-                code: "Polo123",
-                quantity: 1,
-                price: 200000,
-                length: 12,
-                width: 12,
-                height: 12,
-                weight: 1200,
-                category: {
-                    level1: "Áo"
-                }
-            }
-        ]
+        items: req.body.items.map(item => ({
+            productId: item.productId,
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price
+        })),
     };
 
     try {
+        console.log("Received req.body:", req.body); 
+
+        const invoice = new Invoice({
+            user: req.body.userId,
+            items: req.body.items.map(item => ({
+                productId: item.productId,
+                name: item.name,
+                quantity: item.quantity,
+                price: item.price
+            })),
+            totalAmount: req.body.amount,
+            status: 'pending',
+            shippingAddress: {
+                address: req.body.shippingAddress.address,
+                city: req.body.shippingAddress.city,
+                postalCode: req.body.shippingAddress.postalCode,
+                country: req.body.shippingAddress.country
+            },
+            paymentMethod: req.body.paymentMethod
+        });
+
+        const savedInvoice = await invoice.save();
+        console.log("Saved invoice:", savedInvoice);
+
         const ghnResponse = await OrderController.createOrder(orderData);
         console.log("ghnResponse = ", ghnResponse);
-        res.json({ paymentUrl: vnpUrl, ghnOrder: ghnResponse });
+
+        if (ghnResponse.code === 200 && ghnResponse.data.order_code) {
+            savedInvoice.orderCode = ghnResponse.data.order_code; 
+            await savedInvoice.save();
+        }
+
+        res.json({
+            paymentUrl: vnpUrl,
+            ghnOrder: ghnResponse,
+            invoiceId: savedInvoice._id
+        });
     } catch (error) {
-        res.status(500).json({ paymentUrl: vnpUrl, error: "Không thể tạo đơn GHN" });
+        console.error("Error:", error.message);
+        res.status(500).json({
+            paymentUrl: vnpUrl,
+            error: "Không thể tạo đơn GHN hoặc lưu invoice",
+            details: error.message
+        });
     }
 });
 

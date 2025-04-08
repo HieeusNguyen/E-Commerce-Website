@@ -12,6 +12,7 @@ import { userSigninReducer,
     userListReducer, 
     userDeleteReducer 
 } from "./reducers/userReducer";
+import { invoiceListReducer, invoiceSaveReducer, invoiceDeleteReducer } from "./reducers/invoiceReducers";
 import { cartReducer } from "./reducers/cartReducers";
 import { checkoutReducer } from "./reducers/checkoutReducers"; 
 import thunk from "redux-thunk";
@@ -38,6 +39,9 @@ const reducer = combineReducers({
     productSave: productSaveReducer,
     productDelete: productDeleteReducer,
     checkout: checkoutReducer, 
+    invoiceList: invoiceListReducer,
+    invoiceSave: invoiceSaveReducer,
+    invoiceDelete: invoiceDeleteReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

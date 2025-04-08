@@ -19,6 +19,7 @@ router.post("/signin", async (req, res) => {
             name: signinUser.name,
             email: signinUser.email,
             isAdmin: signinUser.isAdmin,
+            phoneNumber: signinUser.phoneNumber,
             token: getToken(signinUser),
         });
     } else {
@@ -29,6 +30,7 @@ router.post("/register", async (req, res) => {
     const user = new User({
         name: req.body.name,
         email: req.body.email,
+        phoneNumber: req.body.phoneNumber,
         password: req.body.password
     });
     const newUser = await user.save();
@@ -38,6 +40,7 @@ router.post("/register", async (req, res) => {
             name: newUser.name,
             email: newUser.email,
             isAdmin: newUser.isAdmin,
+            phoneNumber: newUser.phoneNumber,
             token: getToken(newUser)
         });
     } else {

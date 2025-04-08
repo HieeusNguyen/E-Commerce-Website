@@ -1,23 +1,28 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { checkout } from "../actions/CheckoutAction"; 
+import { checkout } from "../actions/CheckoutAction";
 import CheckoutSteps from "../components/CheckoutSteps";
 
 function PlaceOrderScreen() {
     const cart = useSelector((state) => state.cart);
-    const checkoutState = useSelector((state) => state.checkout); 
+    const userSignin = useSelector((state) => state.userSignin || {});
+    const checkoutState = useSelector((state) => state.checkout);
     const { cartItems, shipping, payment } = cart;
-    
+    const { userInfo } = userSignin;
+    const { loading, error, paymentUrl, invoiceId, ghnOrder } = checkoutState;
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!shipping.address) {
+        if (!userInfo) {
+            navigate("/signin"); 
+        } else if (!shipping.address) {
             navigate("/shipping");
-        } else if (!payment) {
+        } else if (!payment.paymentMethod) {
             navigate("/payment");
         }
-    }, [shipping, payment, navigate]);
+    }, [userInfo, shipping, payment, navigate]);
 
     const itemsPrice = cartItems.reduce((a, c) => a + c.price * c.qty, 0);
     const shippingPrice = itemsPrice > 100 ? 0 : 10;
@@ -31,17 +36,35 @@ function PlaceOrderScreen() {
     }, []);
 
     const placeOrderHandler = () => {
-        const orderData = {
-            amount: totalPrice, 
-            orderDescription: `Order from user - Total: ${totalPrice}`, 
-            orderType: "250000", 
-            bankCode: "", 
-            language: "vn", 
-            cartItems: cartItems, 
-            shippingAddress: shipping, 
-            paymentMethod: payment.paymentMethod, 
-        };
+        console.log("cartItems trước khi gửi:", cartItems); 
+        if (!userInfo || !userInfo._id) {
+            navigate("/signin"); 
+            return;
+        }
 
+        const orderData = {
+            amount: totalPrice,
+            orderDescription: `Order from user ${userInfo?.name || "Guest"} - Total: ${totalPrice}`,
+            orderType: "250000",
+            bankCode: "",
+            language: "vn",
+            userId: userInfo?._id,
+            items: cartItems.map((item) => ({
+                name: item.name,
+                productId: item.product,
+                quantity: item.qty,
+                price: item.price,
+            })),
+            shippingAddress: {
+                address: shipping.address,
+                city: shipping.city,
+                postalCode: shipping.postalCode,
+                country: shipping.country,
+            },
+            paymentMethod: payment.paymentMethod,
+            weight: cartItems.reduce((a, c) => a + (c.weight || 200), 0),
+        };
+        console.log("orderData gửi đi:", orderData);
         dispatch(checkout(orderData));
     };
 
@@ -59,7 +82,7 @@ function PlaceOrderScreen() {
                     </div>
                     <div>
                         <h3>Payment</h3>
-                        <div>Payment Method: {payment ? payment.paymentMethod : 'Not selected'}</div>
+                        <div>Payment Method: {payment.paymentMethod || "Not selected"}</div>
                     </div>
                     <div>
                         <ul className="cart-list-container">
@@ -73,7 +96,7 @@ function PlaceOrderScreen() {
                                 cartItems.map((item) => (
                                     <li key={item.product}>
                                         <div className="cart-image">
-                                            <img src={item.image} alt="product" />
+                                            <img src={item.image} alt={item.name} />
                                         </div>
                                         <div className="cart-name">
                                             <div>
@@ -93,36 +116,53 @@ function PlaceOrderScreen() {
                 <div className="placeorder-action">
                     <ul>
                         <li>
-                            <button
-                                className="button primary full-width"
-                                onClick={placeOrderHandler}
-                                disabled={checkoutState.loading} 
-                            >
-                                {checkoutState.loading ? "Processing..." : "Place Order"}
-                            </button>
-                        </li>
-                        <li>
                             <h3>Order Summary</h3>
                         </li>
                         <li>
                             <div>Items</div>
-                            <div>${itemsPrice}</div>
+                            <div>{itemsPrice.toFixed(2)}đ</div>
                         </li>
                         <li>
                             <div>Shipping</div>
-                            <div>${shippingPrice}</div>
+                            <div>{shippingPrice.toFixed(2)}đ</div>
                         </li>
                         <li>
                             <div>Tax</div>
-                            <div>${taxPrice}</div>
+                            <div>{taxPrice.toFixed(2)}đ</div>
                         </li>
                         <li>
                             <div>Order Total</div>
-                            <div>${totalPrice}</div>
+                            <div>{totalPrice.toFixed(2)}đ</div>
                         </li>
+                        {!paymentUrl && (
+                            <li>
+                                <button
+                                    className="button primary full-width"
+                                    onClick={placeOrderHandler}
+                                    disabled={loading || cartItems.length === 0}
+                                >
+                                    {loading ? "Processing..." : "Place Order"}
+                                </button>
+                            </li>
+                        )}
                     </ul>
-                    {checkoutState.error && (
-                        <div className="error-message">{checkoutState.error}</div>
+                    {error && <div className="error-message">{error}</div>}
+                    {paymentUrl && (
+                        <div className="payment-link">
+                            <p>Order placed successfully!</p>
+                            <a
+                                href={paymentUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="button primary full-width"
+                            >
+                                Proceed to Payment
+                            </a>
+                            {invoiceId && <p>Invoice ID: {invoiceId}</p>}
+                            {ghnOrder && (
+                                <p>GHN Order Code: {ghnOrder.order_code || "N/A"}</p>
+                            )}
+                        </div>
                     )}
                 </div>
             </div>

@@ -10,6 +10,7 @@ import {
 const addToCart = (productId, qty) => async (dispatch, getState) => {
     try {
         const { data } = await Axios.get("/api/products/" + productId);
+        console.log("Product data từ API:", data);
         dispatch({
             type: CART_ADD_ITEM,
             payload: {
@@ -24,6 +25,7 @@ const addToCart = (productId, qty) => async (dispatch, getState) => {
         const {
             cart: { cartItems }
         } = getState();
+        console.log("cartItems sau khi thêm:", cartItems);
         Cookie.set("cartItems", JSON.stringify(cartItems));
     } catch (error) {}
 };

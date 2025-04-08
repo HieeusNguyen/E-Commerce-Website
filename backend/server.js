@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import userRoute from "./routes/userRoute";
 import productRoute from "./routes/productRoute";
 import checkoutRoute from "./routes/checkoutRouter";
+import invoiceRoute from "./routes/invoiceRouter";
 import cors from "cors";
 
 const path = require("path");
@@ -32,6 +33,7 @@ app.use(bodyParser.json());
 app.use("/api/users", userRoute);
 app.use("/api/products", productRoute);
 app.use("/api/checkout", checkoutRoute);
+app.use("/api/invoices", invoiceRoute);
 
 // Serve static assests if in production
 

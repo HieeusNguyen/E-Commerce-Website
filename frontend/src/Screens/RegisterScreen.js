@@ -6,6 +6,7 @@ import { register } from "../actions/userAction";
 function RegisterScreen() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [password, setPassword] = useState("");
     const [rePassword, setRePassword] = useState("");
     const userRegister = useSelector(state => state.userRegister);
@@ -28,7 +29,7 @@ function RegisterScreen() {
             alert("Passwords do not match!");
             return;
         }
-        dispatch(register(name, email, password));
+        dispatch(register(name, email, phoneNumber, password));
     };
 
     return (
@@ -62,6 +63,19 @@ function RegisterScreen() {
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
+                        />
+                    </li>
+                    <li>
+                        <label htmlFor="phone-number">Phone Number</label>
+                        <input
+                            type="tel"
+                            name="phone-number"
+                            id="phone-number"
+                            value={phoneNumber}
+                            onChange={e => setPhoneNumber(e.target.value)}
+                            required
+                            pattern="\d{10,15}" 
+                            title="Phone number must be 10-15 digits"
                         />
                     </li>
                     <li>

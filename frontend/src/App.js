@@ -17,6 +17,7 @@ import PaymentStatus from "./Screens/PaymentStatus";
 
 import logo from "./Images/logo.png";
 import UserManagementScreen from "./Screens/UsersManagementScreen";
+import InvoicesScreen from "./Screens/InvoiceScreen";
 
 function App() {
     const userSignin = useSelector(state => state.userSignin);
@@ -43,7 +44,7 @@ function App() {
                     <div className="brand">
                         <button onClick={openmenu}>☰</button>
                         <Link to="/">
-                            Origami
+                            Dongho.vn
                             <img src={logo} className="logo" alt="logo" />
                         </Link>
                     </div>
@@ -66,7 +67,7 @@ function App() {
                                             <>
                                                 <Link to="/admin/users">Quản lý người dùng</Link>
                                                 <Link to="/products">Quản lý sản phẩm</Link>
-                                                <Link to="/admin/orders">Quản lý đơn hàng</Link>
+                                                <Link to="/invoices">Quản lý đơn hàng</Link>
                                             </>
                                         )}
                                         <button onClick={handleLogout}>Logout</button>
@@ -109,6 +110,7 @@ function App() {
                             <Route path="/" element={<HomeScreen />} exact />
                             <Route path="/cart/:id?" element={<CartScreen />} />
                             <Route path="/admin/users" element={<UserManagementScreen />} />
+                            <Route path="/invoices" element={<InvoicesScreen />} />
                         </Routes>
                     </div>
                 </main>

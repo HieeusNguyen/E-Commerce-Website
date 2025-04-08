@@ -7,15 +7,26 @@ import {
 const initialState = {
     loading: false,
     error: null,
-    order: null,
+    orderData: null,  
+    paymentUrl: null, 
+    ghnOrder: null,  
+    invoiceId: null,  
 };
 
 export const checkoutReducer = (state = initialState, action) => {
     switch (action.type) {
         case CHECKOUT_REQUEST:
-            return { ...state, loading: true };
+            return { ...state, loading: true, error: null }; 
         case CHECKOUT_SUCCESS:
-            return { ...state, loading: false, order: action.payload, error: null };
+            return {
+                ...state,
+                loading: false,
+                orderData: action.payload.orderData,
+                paymentUrl: action.payload.paymentUrl,
+                ghnOrder: action.payload.ghnOrder,
+                invoiceId: action.payload.invoiceId,
+                error: null
+            };
         case CHECKOUT_FAIL:
             return { ...state, loading: false, error: action.payload };
         default:
