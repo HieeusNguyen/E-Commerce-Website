@@ -21,7 +21,7 @@ export const listInvoices = () => async (dispatch, getState) => {
                     try {
                         const ghnResponse = await Axios.post(
                             "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/detail",
-                            { client_order_code: invoice.orderCode },
+                            { order_code: invoice.orderCode },
                             {
                                 headers: {
                                     "Content-Type": "application/json",
@@ -31,12 +31,15 @@ export const listInvoices = () => async (dispatch, getState) => {
                         );
 
                         if (ghnResponse.data.code === 200 && ghnResponse.data.data.length > 0) {
-                            const ghnOrder = ghnResponse.data.data[0];
+                            const ghnOrder = ghnResponse.data.data;
+                            console.log("ghnorderrrrr: ",ghnOrder)
                             const ghnStatus = ghnOrder.status;
 
                             let newStatus;
                             switch (ghnStatus) {
                                 case "picking":
+                                    newStatus = "picking";
+                                    break;
                                 case "picked":
                                     newStatus = "pending";
                                     break;
