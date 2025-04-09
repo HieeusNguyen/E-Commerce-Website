@@ -34,6 +34,7 @@ const signin = (email, password) => async dispatch => {
         dispatch({ type: USER_SIGNIN_FAIL, payload: error.message });
     }
 };
+
 const register = (name, email, phoneNumber, password) => async dispatch => {
     dispatch({
         type: USER_REGISTER_REQUEST,

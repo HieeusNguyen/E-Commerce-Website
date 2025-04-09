@@ -68,8 +68,18 @@ link {
     text-decoration: none;
     font-family: "Pacifico", cursive;
 }
+
+.header-links{
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
 .header-links span {
     margin-right: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .header-links a span {
     font-size: 3.5rem;
@@ -82,6 +92,14 @@ link {
 .header-links a span:hover {
     color: rgb(212, 175, 55);
 }
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 .main {
     grid-area: main;
 }

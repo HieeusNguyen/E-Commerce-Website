@@ -60,7 +60,11 @@ function App() {
                             {userInfo ? (
                                 <div className="user-menu-wrapper">
                                     <Link to="/profile" className="user-name">
-                                        {userInfo.name}
+                                    <img 
+                                            src={userInfo.avatar} 
+                                            alt="User Avatar"
+                                            className="user-avatar" 
+                                        />
                                     </Link>
                                     <div className="dropdown-menu">
                                         {userInfo.isAdmin === true && (

@@ -20,6 +20,7 @@ router.post("/signin", async (req, res) => {
             email: signinUser.email,
             isAdmin: signinUser.isAdmin,
             phoneNumber: signinUser.phoneNumber,
+            avatar: signinUser.avatar,
             token: getToken(signinUser),
         });
     } else {
@@ -75,10 +76,11 @@ router.post("/google-login", async (req, res) => {
                 email,
                 password: "", 
                 isAdmin: false,
-                picture
+                avatar: picture,
             });
 
             await newUser.save();
+            user = newUser;
         }
 
         const authToken = jwt.sign({ _id: user._id }, config.JWT_SECRET, {
@@ -86,7 +88,6 @@ router.post("/google-login", async (req, res) => {
         });
 
         res.json({
-            _id: user._id,
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
