@@ -59,7 +59,8 @@ link {
     box-shadow: 5px 0.1px 10px rgb(212, 175, 55);
 }
 .logo {
-    height: 50px;
+    height: 36px;
+    margin-left: 10px;
 }
 .brand a {
     color: black;
