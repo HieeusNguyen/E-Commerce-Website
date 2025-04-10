@@ -1,5 +1,5 @@
 import express from "express";
-import User from "../models/userModel";
+import User from "../models/usermodel";
 import { getToken } from "../util";
 import { OAuth2Client } from "google-auth-library";
 import jwt from "jsonwebtoken";

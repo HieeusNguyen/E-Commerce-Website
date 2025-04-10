@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default {
-    MONGODB_URL: process.env.MONGODB_URL || "mongodb://127.0.0.1/ecommerce_website",
+    MONGODB_URL: process.env.MONGODB_URL || "mongodb://hieudeptrai4603:uhTa0503TH@ac-ypxydby-shard-00-00.fcknjbe.mongodb.net:27017,ac-ypxydby-shard-00-01.fcknjbe.mongodb.net:27017,ac-ypxydby-shard-00-02.fcknjbe.mongodb.net:27017/?replicaSet=atlas-xta2ys-shard-0&ssl=true&authSource=admin&retryWrites=true&w=majority&appName=Cluster0",
     JWT_SECRET: process.env.JWT_SECRET || "somethingsecret",
     VNP_TMNCODE: "UV0NXBSY",
     VNP_HASHSECRET: "JAJL4BSJ2IHJN2C95N8QQ7SR8DGQOGWL",
