@@ -218,7 +218,7 @@ function InvoicesScreen(props) {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Order Code</th>
                             <th>User</th>
                             <th>Total Amount</th>
                             <th>Status</th>
@@ -230,8 +230,8 @@ function InvoicesScreen(props) {
                     <tbody>
                         {invoices && invoices.map(invoice => (
                             <tr key={invoice._id}>
-                                <td>{invoice._id}</td>
-                                <td>{invoice.user.name}</td>
+                                <td>{invoice.orderCode}</td>
+                                <td>{invoice.user?.name}</td>
                                 <td>{invoice.totalAmount}</td>
                                 <td>{invoice.status}</td>
                                 <td>{invoice.paymentMethod}</td>

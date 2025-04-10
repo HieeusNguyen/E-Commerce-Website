@@ -17,7 +17,6 @@ export const listInvoices = () => async (dispatch, getState) => {
         const updatedInvoices = await Promise.all(
             invoices.map(async (invoice) => {
                 if (invoice.orderCode) {
-                    console.log("Fetching GHN for orderCode:", invoice.orderCode);
                     try {
                         const ghnResponse = await Axios.post(
                             "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/detail",
@@ -32,26 +31,30 @@ export const listInvoices = () => async (dispatch, getState) => {
 
                         if (ghnResponse.data.code === 200 && ghnResponse.data.data.length > 0) {
                             const ghnOrder = ghnResponse.data.data;
-                            console.log("ghnorderrrrr: ",ghnOrder)
                             const ghnStatus = ghnOrder.status;
 
-                            let newStatus;
+                            var newStatus;
                             switch (ghnStatus) {
                                 case "picking":
                                     newStatus = "picking";
                                     break;
                                 case "picked":
-                                    newStatus = "pending";
+                                    newStatus = "picked";
                                     break;
                                 case "delivering":
-                                    newStatus = "shipped";
+                                    newStatus = "delivering";
                                     break;
                                 case "delivered":
                                     newStatus = "delivered";
                                     break;
                                 case "return":
+                                    newStatus = "return";
+                                    break;
                                 case "cancel":
                                     newStatus = "cancelled";
+                                    break;
+                                case "pending":
+                                    newStatus = "pending";
                                     break;
                                 default:
                                     newStatus = invoice.status; 
