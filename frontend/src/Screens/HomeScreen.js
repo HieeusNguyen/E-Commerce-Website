@@ -21,32 +21,26 @@ function HomeScreen(props) {
         <div>
             <Corousel />
             {loading ? (
-                <div>loading...</div>
+                <div>Loading...</div>
             ) : error ? (
                 <div>{error}</div>
-            ) : (
+            ) : products && Array.isArray(products) ? (
                 <ul className="products">
-                    {products.map(product => (
+                    {products.map((product) => (
                         <li key={product._id}>
                             <div className="product">
-                                <Link to={"/product/" + product._id}>
+                                <Link to={`/product/${product._id}`}>
                                     <img
                                         className="product-image"
                                         src={product.image}
-                                        alt="product"
+                                        alt={product.name}
                                     />
                                 </Link>
-                                <Link to={"/product/" + product._id}>
-                                    <div className="product-name">
-                                        {product.name}
-                                    </div>
+                                <Link to={`/product/${product._id}`}>
+                                    <div className="product-name">{product.name}</div>
                                 </Link>
-                                <div className="product-brand">
-                                    {product.brand}
-                                </div>
-                                <div className="product-price">
-                                    ${product.price}
-                                </div>
+                                <div className="product-brand">{product.brand}</div>
+                                <div className="product-price">${product.price}</div>
                                 <div className="product-rating">
                                     {/* {product.rating} Stars ({product.numReviews} Reviews) */}
                                 </div>
@@ -54,6 +48,8 @@ function HomeScreen(props) {
                         </li>
                     ))}
                 </ul>
+            ) : (
+                <div>No products available</div>
             )}
         </div>
     );
