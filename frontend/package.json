@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "proxy": "http://localhost:6000",
+  "proxy": "https://e-commerce-website-ukfo.onrender.com",
   "secure": false,
   "version": "0.1.0",
   "private": true,
